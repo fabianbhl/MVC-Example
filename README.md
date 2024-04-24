@@ -12,8 +12,11 @@ This project implements a simple PHP routing system with middleware support. It 
 
 ## Project Structure
 **AboutController:** Handles routes related to 'about' information. It can return hardcoded data or data based on URL parameters. <br />
+
 **MainController:** Manages the main entry points of the application, returning a static message. <br />
+
 **AuthMiddleware:** Provides basic authentication checking for routes that require it. <br />
+
 **Router:** Core of the routing system, it matches requested URLs against registered routes and applies middlewares if specified. <br />
 
 ## Output
@@ -43,12 +46,19 @@ generate the autoload files.
 
 ## Next Steps to Improve and Extend the Project
 **Error Handling:** Implement more sophisticated error handling and responses, especially for 404 and 500 status codes. <br />
+
 **Middleware Enhancements:** Extend middleware capabilities to handle more cases such as rate limiting, CORS, etc. <br />
+
 **Enhanced Routing:** Support for more HTTP methods (POST, PUT, DELETE) and regex-based route patterns. <br />
+
 **Dependency Injection:** Implement a dependency injection container to manage class dependencies more effectively. <br />
+
 **Testing:** Setup unit and integration tests using frameworks like PHPUnit to ensure reliability and robustness. <br />
+
 **Database Integration:** Integrate a database to interact with dynamic data rather than static responses. <br />
+
 **Configuration Management:** Implement a configuration management system to handle different environments (development, testing, production). <br />
+
 **Logging:** Add logging capabilities to capture requests and errors for debugging and monitoring purposes.
 
 This project provides a robust starting point for developing PHP-based applications requiring a custom routing system. It can be extended and customized to fit more specific needs or to scale up for larger applications.
