@@ -9,6 +9,7 @@ This project implements a simple PHP routing system with middleware support. It 
 3. Middleware: Includes an AuthMiddleware that checks for the presence of an Authorization header and returns a 401 Unauthorized response if it's absent.
 4. JSON Responses: All controllers send responses in JSON format, making it suitable for APIs.
 5. Dynamic URL Parameters: Supports dynamic routing where parameters are embedded in the URL.
+6. Robust error handling capabilities for maintaining consistent system behavior.
 
 ## Project Structure
 **AboutController:** Handles routes related to 'about' information. It can return hardcoded data or data based on URL parameters. <br />
@@ -38,6 +39,10 @@ Unauthorized
 ```
 {"name":"Steven"}
 ```
+**Route to test error handling: /500_test**
+```
+{"error":{"code":500,"message":"Class \"App\\Controller\\ErrorController\" not found"}}
+```
 
 ## How to Run the Project
 Feel free to use my docker repository and pull the project files to the web folder.
@@ -45,14 +50,13 @@ After that, make sure to have composer installed and run *composer dump-autoload
 generate the autoload files.
 
 ## Next Steps to Improve and Extend the Project
-1. **Error Handling:** Implement more sophisticated error handling and responses, especially for 404 and 500 status codes.
-2. **Middleware Enhancements:** Extend middleware capabilities to handle more cases such as rate limiting, CORS, etc.
-3. **Enhanced Routing:** Support for more HTTP methods (POST, PUT, DELETE) and regex-based route patterns.
-4. **Dependency Injection:** Implement a dependency injection container to manage class dependencies more effectively.
-5. **Testing:** Setup unit and integration tests using frameworks like PHPUnit to ensure reliability and robustness.
-6. **Database Integration:** Integrate a database to interact with dynamic data rather than static responses.
-7. **Configuration Management:** Implement a configuration management system to handle different environments (development, testing, production).
-8. **Logging:** Add logging capabilities to capture requests and errors for debugging and monitoring purposes.
+1. **Middleware Enhancements:** Extend middleware capabilities to handle more cases such as rate limiting, CORS, etc.
+2. **Enhanced Routing:** Support for more HTTP methods (POST, PUT, DELETE) and regex-based route patterns.
+3. **Dependency Injection:** Implement a dependency injection container to manage class dependencies more effectively.
+4. **Testing:** Setup unit and integration tests using frameworks like PHPUnit to ensure reliability and robustness.
+5. **Database Integration:** Integrate a database to interact with dynamic data rather than static responses.
+6. **Configuration Management:** Implement a configuration management system to handle different environments (development, testing, production).
+7. **Logging:** Add logging capabilities to capture requests and errors for debugging and monitoring purposes.
 
 This project provides a robust starting point for developing PHP-based applications requiring a custom routing system. It can be extended and customized to fit more specific needs or to scale up for larger applications.
 

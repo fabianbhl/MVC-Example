@@ -11,10 +11,14 @@
  * making the code more robust, maintainable, and easier to extend.
  */
 
-namespace App\Interfaces;
+namespace App\Interface;
 
 use Closure;
 
+/**
+ * Interface Middleware
+ * @package App\Interface
+ */
 interface Middleware {
     public function handle($request, Closure $next);
 }

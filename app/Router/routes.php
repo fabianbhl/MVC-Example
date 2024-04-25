@@ -10,9 +10,14 @@
  */
 
 use App\Controller\AboutController;
+use App\Controller\ErrorController;
+
 use App\Middleware\AuthMiddleware;
 
 $router->register('GET', '', 'MainController@index');
 $router->register('GET', 'auth', 'MainController@auth', [new AuthMiddleware()]);
 $router->register('GET', 'about', 'AboutController@index');
 $router->register('GET', 'about/{name:string}', 'AboutController@name');
+
+// ErrorController does not exist yet, so this route will throw a 500 error to test error handling
+$router->register('GET', '500_test', 'ErrorController@test');

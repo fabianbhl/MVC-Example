@@ -13,14 +13,25 @@
 
 namespace App\Middleware;
 
-use App\Interfaces\Middleware;
+use App\Interface\Middleware;
+use App\Foundation\Response\JsonResponse;
 use Closure;
 
+/**
+ * Class AuthMiddleware
+ * @package App\Middleware
+ */
 class AuthMiddleware implements Middleware {
+    /**
+     * Handle method for the AuthMiddleware class.
+     * 
+     * @param array $request The HTTP request data.
+     * @param Closure $next The next middleware or handler to pass control to.
+     */
     public function handle($request, $next) {
         if (!isset($request['headers']['Authorization'])) { // Check if the Authorization header is present
             http_response_code(401);
-            exit('Unauthorized');
+            exit(JsonResponse::error("Unauthorized", 401));
         }
         return $next($request); // Proceed with the next middleware or handler
     }

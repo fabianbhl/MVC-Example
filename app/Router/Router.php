@@ -21,13 +21,28 @@
 
 namespace App\Router;
 
+/**
+ * Class Router
+ * @package App\Router
+ */
 class Router {
     private $routes = [];
 
+    /**
+     * Register a new route with the router
+     * 
+     * @param string $method The HTTP method (GET, POST, PUT, DELETE)
+     * @param string $pattern The URL pattern with optional parameters in {param} format
+     * @param mixed $callback The callback function or controller method to execute
+     * @param array $middlewares An array of middleware classes to apply
+     */
     public function register($method, $pattern, $callback, $middlewares = []) {
         $this->routes[] = ['method' => $method, 'pattern' => $pattern, 'callback' => $callback, 'middlewares' => $middlewares];
     }
 
+    /**
+     * Dispatch the request to the appropriate route
+     */
     public function dispatch() {
         $uri = trim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/'); // Extract the URI and method from the request
         $method = $_SERVER['REQUEST_METHOD'];
@@ -50,9 +65,17 @@ class Router {
         }
 
         http_response_code(404);
-        echo "404 Not Found";
+        $data = ["error" => ["code" => 404, "message" => "Not Found"]];
+        header('Content-Type: application/json');
+        echo json_encode($data);
     }
 
+    /**
+     * Resolve the callback into a callable function
+     * 
+     * @param mixed $callback The callback function or controller method
+     * @return callable The resolved callable function
+     */
     private function resolveCallback($callback) {
         if (is_string($callback) && strpos($callback, '@') !== false) { // Check if the callback is in [object, method] format like MainController@index
             list($class, $method) = explode('@', $callback, 2); // Split the class and method names by @
@@ -62,6 +85,14 @@ class Router {
         return $callback;
     }
 
+    /**
+     * Match the URL pattern against the URI and extract parameters
+     * 
+     * @param string $pattern The URL pattern with optional parameters in {param} format
+     * @param string $uri The request URI
+     * @param array $params An array to store the extracted parameters
+     * @return bool True if the pattern matches the URI, false otherwise
+     */
     private function match($pattern, $uri, &$params) {
         $params = [];
         $pattern = preg_replace_callback('/\{(\w+)(:\w+)?\}/', function ($matches) { // Replace the {param} placeholders with named regex capture groups
@@ -91,6 +122,13 @@ class Router {
         return false;
     }    
 
+    /**
+     * Apply middlewares to the handler in reverse order
+     * 
+     * @param array $middlewares An array of middleware classes
+     * @param callable $handler The handler function to apply middlewares to
+     * @return callable The final handler with middlewares applied
+     */
     private function applyMiddlewares($middlewares, $handler) {
         if (is_array($handler)) { // Wrap the handler in a closure if it's a function
             $handler = function($request) use ($handler) {

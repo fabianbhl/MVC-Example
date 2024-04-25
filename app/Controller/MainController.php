@@ -16,16 +16,26 @@
 
 namespace App\Controller;
 
+use App\Foundation\Response\JsonResponse;
+
+/**
+ * Class MainController
+ * @package App\Controller
+ */
 class MainController {
+    /**
+     * Index method
+     */
     public function index() {
         $data = ["message" => "Lorem ipsum dolor sit amet"];
-        header('Content-Type: application/json');
-        echo json_encode($data);
+        JsonResponse::data($data);
     }
 
+    /**
+     * Auth method
+     */
     public function auth() {
         $data = ["message" => "Lorem ipsum dolor sit amet"];
-        header('Content-Type: application/json');
-        echo json_encode($data);
+        JsonResponse::data($data);
     }
 }

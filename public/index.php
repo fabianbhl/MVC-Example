@@ -3,8 +3,7 @@
 /**
  * The index.php is the main entry point for the web application, managing HTTP requests:
  * 
- *      Composer Autoloader: Initializes Composer's autoloader to handle dependencies 
- *      and class loading automatically.
+ *      Configuration: Includes the bootstrap.php file to set up the application environment.
  * 
  *      Router Setup: Creates a Router instance and loads route definitions that 
  *      map URLs to controller actions.
@@ -14,11 +13,10 @@
  *         or return a 404 Not Found response if no match is found.
  */
 
-require '../vendor/autoload.php'; 
+require __DIR__ . '/../app/core/bootstrap.php';
 
 use App\Router\Router;
 
 $router = new Router(); 
 require __DIR__ . '/../app/Router/routes.php';
-
 $router->dispatch();

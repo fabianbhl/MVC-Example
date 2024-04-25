@@ -17,16 +17,28 @@
 
 namespace App\Controller;
 
+use App\Foundation\Response\JsonResponse;
+
+/**
+ * Class AboutController
+ * @package App\Controller
+ */
 class AboutController {
+    /**
+     * Index method
+     */
     public function index() {
         $data = ["name" => "Fabian"];
-        header('Content-Type: application/json');
-        echo json_encode($data);
+        JsonResponse::data($data);
     }
 
+    /**
+     * Name method
+     * 
+     * @param array $request
+     */
     public function name($request) {
         $data = ["name" => $request['params']['name']]; // $request['params'] is an associative array with the URL parameters
-        header('Content-Type: application/json');
-        echo json_encode($data);
+        JsonResponse::data($data);
     }
 }
