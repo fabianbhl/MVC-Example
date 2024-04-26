@@ -2,6 +2,12 @@
 
 All notable changes and additions will be documented in this file.
 
+## 2024-04-26
+
+### Added
+- Implemented rate limiting middleware using the sliding window approach to ensure more accurate and flexible control of API request rates.
+- Added a global middleware array to consistently apply specified middleware across all routes.
+
 ## 2024-04-25
 
 ### Added

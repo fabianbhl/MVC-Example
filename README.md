@@ -4,19 +4,22 @@
 This project implements a simple PHP routing system with middleware support. It provides a foundational framework for handling HTTP requests and routing them to the appropriate controllers based on the URI patterns. This setup includes basic controllers, example middleware for authentication, and the core router which manages the dispatch process.
 
 ## Features
-1. Routing: Ability to define GET routes with optional parameters and specific methods.
-2. Controllers: Separate controllers for handling different endpoints (AboutController and MainController).
-3. Middleware: Includes an AuthMiddleware that checks for the presence of an Authorization header and returns a 401 Unauthorized response if it's absent.
-4. JSON Responses: All controllers send responses in JSON format, making it suitable for APIs.
-5. Dynamic URL Parameters: Supports dynamic routing where parameters are embedded in the URL.
-6. Robust error handling capabilities for maintaining consistent system behavior.
+1. **Routing:** Ability to define GET routes with optional parameters and specific methods.
+2. **Controllers:** Separate controllers for handling different endpoints (AboutController and MainController).
+3. **Middleware:** Includes an *AuthMiddleware* that checks for the presence of an Authorization header and returns a 401 Unauthorized response if it's absent.
+The *Rate limiting middleware* restricts the number of requests a user can make to an API within a set period, protecting the service from abuse and ensuring equitable access.
+The sliding window approach continuously updates request counts based on real-time data, providing a smooth and accurate enforcement of rate limits. Please keep in mind
+that this is only for demonstration purposes and a token bucket algorithm, e.g. implemented with Redis, is a better way for a production environment to efficiently manage request bursts. To test the middleware, just refresh the site ten times to show the error message.
+4. **JSON Responses:** All controllers send responses in JSON format, making it suitable for APIs.
+5. **Dynamic URL Parameters:** Supports dynamic routing where parameters are embedded in the URL.
+6. **Error Handling:** Robust capabilities for maintaining consistent system behavior.
 
 ## Project Structure
 **AboutController:** Handles routes related to 'about' information. It can return hardcoded data or data based on URL parameters. <br />
 
 **MainController:** Manages the main entry points of the application, returning a static message. <br />
 
-**AuthMiddleware:** Provides basic authentication checking for routes that require it. <br />
+**Middleware:** For basic authorization and rate limiting. <br />
 
 **Router:** Core of the routing system, it matches requested URLs against registered routes and applies middlewares if specified. <br />
 

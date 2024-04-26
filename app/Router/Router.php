@@ -27,6 +27,33 @@ namespace App\Router;
  */
 class Router {
     private $routes = [];
+    private $globalMiddleware = [];
+
+    /**
+     * Load global middleware on Router instantiation
+     */
+    public function __construct() {
+        $this->loadGlobalMiddleware();
+    }
+
+    /**
+     * Load global middleware from the middleware configuration file
+     */
+    private function loadGlobalMiddleware() {
+        // Retrieve the array of middleware class names from the middleware.php
+        $middlewareConfig = require dirname(__DIR__) . '/core/middleware.php';
+        
+        // Iterate over the global middleware configuration and instantiate each middleware
+        foreach ($middlewareConfig['global'] as $middlewareClass => $parameters) {
+            // Check if parameters are provided as an array; otherwise, wrap them in one
+            if (!is_array($parameters)) {
+                $parameters = [$parameters]; // Ensure parameters are always treated as an array
+            }
+
+            // Instantiate each middleware with the provided parameters
+            $this->globalMiddleware[] = new $middlewareClass(...$parameters);
+        }
+    }
 
     /**
      * Register a new route with the router
@@ -58,7 +85,8 @@ class Router {
                 ];
 
                 $handler = $this->resolveCallback($route['callback']);
-                $handler = $this->applyMiddlewares($route['middlewares'], $handler);
+                $middleware = array_merge($this->globalMiddleware, $route['middlewares']); // Combine global and specific middlewares
+                $handler = $this->applyMiddleware($middleware, $handler);
 
                 return $handler($request);
             }
@@ -129,16 +157,16 @@ class Router {
      * @param callable $handler The handler function to apply middlewares to
      * @return callable The final handler with middlewares applied
      */
-    private function applyMiddlewares($middlewares, $handler) {
+    private function applyMiddleware($middleware, $handler) {
         if (is_array($handler)) { // Wrap the handler in a closure if it's a function
             $handler = function($request) use ($handler) {
                 return call_user_func($handler, $request);
             };
         }
     
-        while ($middleware = array_pop($middlewares)) { // Apply middleware in reverse order
-            $handler = function($request) use ($middleware, $handler) {
-                return $middleware->handle($request, $handler);
+        while ($_middleware = array_pop($middleware)) { // Apply middleware in reverse order
+            $handler = function($request) use ($_middleware, $handler) {
+                return $_middleware->handle($request, $handler);
             };
         }
         return $handler;
