@@ -11,7 +11,7 @@
 namespace App\Foundation\Handler;
 
 use App\Foundation\Response\JsonResponse;
-use Exception;
+use Error;
 
 /**
  * Class ExceptionHandler
@@ -22,11 +22,10 @@ class ExceptionHandler
     /**
      * Handle uncaught exceptions
      *
-     * @param Exception $exception
+     * @param Error $exception
      */
-    public static function handleException(Exception $exception): void {
+    public static function handleException(Error $exception): void {
         error_log($exception->getMessage());  // Log the exception details
-        http_response_code(500);
         JsonResponse::error(ini_get('display_errors') ? $exception->getMessage() : "Internal Server Error. Try again later.");
     }
 }

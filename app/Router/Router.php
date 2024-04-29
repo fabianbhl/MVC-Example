@@ -65,7 +65,7 @@ class Router {
      * @param mixed $callback The callback function or controller method to execute
      * @param array $middlewares An array of middleware classes to apply
      */
-    public function register(string $method, string $pattern, callable $callback, array $middlewares = []): void {
+    public function register(string $method, string $pattern, string $callback, array $middlewares = []): void {
         $this->routes[] = ['method' => $method, 'pattern' => $pattern, 'callback' => $callback, 'middlewares' => $middlewares];
     }
 
@@ -104,8 +104,8 @@ class Router {
      * @param mixed $callback The callback function or controller method
      * @return callable The resolved callable function
      */
-    private function resolveCallback(callable $callback): callable {
-        if (is_string($callback) && str_contains($callback, '@') !== false) { // Check if the callback is in [object, method] format like MainController@index
+    private function resolveCallback(string $callback): callable {
+        if (str_contains($callback, '@') !== false) { // Check if the callback is in [object, method] format like MainController@index
             list($class, $method) = explode('@', $callback, 2); // Split the class and method names by @
             $class = "App\\Controller\\" . $class;
             return [new $class, $method];
@@ -118,10 +118,10 @@ class Router {
      * 
      * @param string $pattern The URL pattern with optional parameters in {param} format
      * @param string $uri The request URI
-     * @param array $params An array to store the extracted parameters
+     * @param array | null $params An array to store the extracted parameters
      * @return bool True if the pattern matches the URI, false otherwise
      */
-    private function match(string $pattern, string $uri, array &$params): bool{
+    private function match(string $pattern, string $uri, array | null &$params): bool{
         $params = [];
         $pattern = preg_replace_callback('/\{(\w+)(:\w+)?}/', function ($matches) { // Replace the {param} placeholders with named regex capture groups
             $paramName = $matches[1]; // Extract the parameter name and type if provided
