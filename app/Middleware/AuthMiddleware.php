@@ -6,7 +6,7 @@
  * If present, it allows the request to proceed to the next middleware or handler 
  * by executing the $next closure.
  * 
- * This is just an example of a middleware and just let's any request through if the 
+ * This is just an example of a middleware and just lets any request through if the
  * Authorization header is present without any further validation. In a real-world
  * application, you would typically validate the token or credentials in the Authorization header.
  */
@@ -28,10 +28,12 @@ class AuthMiddleware implements Middleware {
      * @param array $request The HTTP request data.
      * @param Closure $next The next middleware or handler to pass control to.
      */
-    public function handle($request, $next) {
+    public function handle(array $request, Closure $next): mixed
+    {
         if (!isset($request['headers']['Authorization'])) { // Check if the Authorization header is present
             http_response_code(401);
-            exit(JsonResponse::error("Unauthorized", 401));
+            JsonResponse::error("Unauthorized", 401);
+            exit;
         }
         return $next($request); // Proceed with the next middleware or handler
     }

@@ -20,5 +20,5 @@ use Closure;
  * @package App\Interface
  */
 interface Middleware {
-    public function handle($request, Closure $next);
+    public function handle(array $request, Closure $next);
 }

@@ -26,7 +26,7 @@ class MainController {
     /**
      * Index method
      */
-    public function index() {
+    public function index(): void{
         $data = ["message" => "Lorem ipsum dolor sit amet"];
         JsonResponse::data($data);
     }
@@ -34,7 +34,7 @@ class MainController {
     /**
      * Auth method
      */
-    public function auth() {
+    public function auth(): void{
         $data = ["message" => "Lorem ipsum dolor sit amet"];
         JsonResponse::data($data);
     }

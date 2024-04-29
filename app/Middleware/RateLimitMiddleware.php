@@ -10,7 +10,7 @@
  * modular and reusable way to add functionality to the request-response cycle, enhancing security, 
  * performance, and maintainability of the application.
  * 
- * In this case, I implementend a simple rate limiting mechanism that tracks the number of requests
+ * In this case, I implemented a simple rate limiting mechanism that tracks the number of requests
  * and stores them in a session. If the request limit is exceeded within a minute, the middleware
  * returns a 429 Too Many Requests response, indicating that the client should wait and try again later.
  * Instead of just checking for requests in a minute, I use a sliding window approach to reset the
@@ -24,21 +24,21 @@
 
 namespace App\Middleware;
 
+use App\Interface\Middleware;
 use App\Foundation\Response\JsonResponse;
 use Closure;
 
-class RateLimitMiddleware
+class RateLimitMiddleware implements Middleware
 {
     /**
      * Handle an incoming request.
      *
-     * @param  array  $request The HTTP request data.
+     * @param array $request The HTTP request data.
      * @param  Closure  $next The next middleware or handler to pass control to.
-     * @param  int  $limit The request limit per minute.
+     * @param int $limit The request limit per minute.
      * @return mixed
      */
-    public function handle($request, Closure $next, $limit = 10)
-    {
+    public function handle(array $request, Closure $next, int $limit = 10): mixed {
         // Start the session if not already started
         session_start();
         $now = time();
@@ -56,7 +56,7 @@ class RateLimitMiddleware
         // Check if the request limit has been exceeded
         if (count($_SESSION['timestamps']) >= $limit) {
             http_response_code(429);
-            return JsonResponse::error("Rate limit exceeded. Please wait and try again.", 429, 429);
+            JsonResponse::error("Rate limit exceeded. Please wait and try again.", 429, 429);
         }
 
         // Add the current timestamp to the session

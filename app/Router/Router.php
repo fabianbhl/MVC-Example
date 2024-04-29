@@ -21,13 +21,15 @@
 
 namespace App\Router;
 
+use App\Foundation\Response\JsonResponse;
+
 /**
  * Class Router
  * @package App\Router
  */
 class Router {
-    private $routes = [];
-    private $globalMiddleware = [];
+    private array $routes = [];
+    private array $globalMiddleware = [];
 
     /**
      * Load global middleware on Router instantiation
@@ -39,7 +41,7 @@ class Router {
     /**
      * Load global middleware from the middleware configuration file
      */
-    private function loadGlobalMiddleware() {
+    private function loadGlobalMiddleware(): void {
         // Retrieve the array of middleware class names from the middleware.php
         $middlewareConfig = require dirname(__DIR__) . '/core/middleware.php';
         
@@ -63,7 +65,7 @@ class Router {
      * @param mixed $callback The callback function or controller method to execute
      * @param array $middlewares An array of middleware classes to apply
      */
-    public function register($method, $pattern, $callback, $middlewares = []) {
+    public function register(string $method, string $pattern, callable $callback, array $middlewares = []): void {
         $this->routes[] = ['method' => $method, 'pattern' => $pattern, 'callback' => $callback, 'middlewares' => $middlewares];
     }
 
@@ -92,10 +94,8 @@ class Router {
             }
         }
 
-        http_response_code(404);
-        $data = ["error" => ["code" => 404, "message" => "Not Found"]];
-        header('Content-Type: application/json');
-        echo json_encode($data);
+        JsonResponse::error("Not Found", 404, 404);
+        return null;
     }
 
     /**
@@ -104,8 +104,8 @@ class Router {
      * @param mixed $callback The callback function or controller method
      * @return callable The resolved callable function
      */
-    private function resolveCallback($callback) {
-        if (is_string($callback) && strpos($callback, '@') !== false) { // Check if the callback is in [object, method] format like MainController@index
+    private function resolveCallback(callable $callback): callable {
+        if (is_string($callback) && str_contains($callback, '@') !== false) { // Check if the callback is in [object, method] format like MainController@index
             list($class, $method) = explode('@', $callback, 2); // Split the class and method names by @
             $class = "App\\Controller\\" . $class;
             return [new $class, $method];
@@ -121,18 +121,16 @@ class Router {
      * @param array $params An array to store the extracted parameters
      * @return bool True if the pattern matches the URI, false otherwise
      */
-    private function match($pattern, $uri, &$params) {
+    private function match(string $pattern, string $uri, array &$params): bool{
         $params = [];
-        $pattern = preg_replace_callback('/\{(\w+)(:\w+)?\}/', function ($matches) { // Replace the {param} placeholders with named regex capture groups
+        $pattern = preg_replace_callback('/\{(\w+)(:\w+)?}/', function ($matches) { // Replace the {param} placeholders with named regex capture groups
             $paramName = $matches[1]; // Extract the parameter name and type if provided
             $type = isset($matches[2]) ? trim($matches[2], ':') : 'string';
 
-            switch ($type) { // Return the named capture group based on the type
-                case 'int': return '(?P<' . $paramName . '>\d+)';
-                case 'string': 
-                default: 
-                    return '(?P<' . $paramName . '>[^/]+)';
-            }
+            return match ($type) {
+                'int' => '(?P<' . $paramName . '>\d+)',
+                default => '(?P<' . $paramName . '>[^/]+)',
+            };
         }, $pattern);
         $pattern = "@^$pattern$@";
     
@@ -153,11 +151,11 @@ class Router {
     /**
      * Apply middlewares to the handler in reverse order
      * 
-     * @param array $middlewares An array of middleware classes
+     * @param array $middleware An array of middleware classes
      * @param callable $handler The handler function to apply middlewares to
      * @return callable The final handler with middlewares applied
      */
-    private function applyMiddleware($middleware, $handler) {
+    private function applyMiddleware(array $middleware, callable $handler): callable {
         if (is_array($handler)) { // Wrap the handler in a closure if it's a function
             $handler = function($request) use ($handler) {
                 return call_user_func($handler, $request);

@@ -27,7 +27,7 @@ class AboutController {
     /**
      * Index method
      */
-    public function index() {
+    public function index(): void {
         $data = ["name" => "Fabian"];
         JsonResponse::data($data);
     }
@@ -37,7 +37,7 @@ class AboutController {
      * 
      * @param array $request
      */
-    public function name($request) {
+    public function name(array $request): void{
         $data = ["name" => $request['params']['name']]; // $request['params'] is an associative array with the URL parameters
         JsonResponse::data($data);
     }

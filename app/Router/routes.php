@@ -9,10 +9,10 @@
  * in URLs where needed, directing requests to appropriate controllers.
  */
 
-use App\Controller\AboutController;
-use App\Controller\ErrorController;
-
 use App\Middleware\AuthMiddleware;
+use App\Router\Router;
+
+$router = new Router();
 
 $router->register('GET', '', 'MainController@index');
 $router->register('GET', 'auth', 'MainController@auth', [new AuthMiddleware()]);

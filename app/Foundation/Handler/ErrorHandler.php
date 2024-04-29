@@ -9,6 +9,8 @@
 
 namespace App\Foundation\Handler;
 
+use ErrorException;
+
 /**
  * Class ErrorHandler
  * @package App\Foundation\Handler
@@ -22,13 +24,12 @@ class ErrorHandler
      * @param string $message
      * @param string $file
      * @param int $line
-     * @throws \ErrorException
+     * @throws ErrorException
      */
-    public static function handleError($severity, $message, $file, $line)
-    {
+    public static function handleError(int $severity, string $message, string $file, int $line): void {
         if (!(error_reporting() & $severity)) {
             return;
         }
-        throw new \ErrorException($message, 0, $severity, $file, $line);
+        throw new ErrorException($message, 0, $severity, $file, $line);
     }
 }

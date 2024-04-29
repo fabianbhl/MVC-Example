@@ -38,7 +38,7 @@ Unauthorized
 ```
 {"name":"Fabian"}
 ```
-**Route with variable inpupt (Steven): /about/Steven**
+**Route with variable input (Steven): /about/Steven**
 ```
 {"name":"Steven"}
 ```
@@ -53,7 +53,7 @@ After that, make sure to have composer installed and run *composer dump-autoload
 generate the autoload files.
 
 ## Next Steps to Improve and Extend the Project
-1. **Middleware Enhancements:** Extend middleware capabilities to handle more cases such as rate limiting, CORS, etc.
+1. **Middleware Enhancements:** Extend middleware capabilities to handle more cases such as CORS, etc.
 2. **Enhanced Routing:** Support for more HTTP methods (POST, PUT, DELETE) and regex-based route patterns.
 3. **Dependency Injection:** Implement a dependency injection container to manage class dependencies more effectively.
 4. **Testing:** Setup unit and integration tests using frameworks like PHPUnit to ensure reliability and robustness.

@@ -24,12 +24,8 @@ class JsonResponse
      * @param array $data The data to encode as JSON.
      * @param int $statusCode The HTTP status code.
      */
-    public static function send($data, $statusCode = 200)
-    {
-        header('Content-Type: application/json');
-        http_response_code($statusCode);
-        echo json_encode($data);
-        exit;  // Ensure no further output is sent
+    public static function send(array $data, int $statusCode = 200): void {
+        JsonResponse::data($data, $statusCode);
     }
 
     /**
@@ -39,8 +35,7 @@ class JsonResponse
      * @param int $code The error code (default 500).
      * @param int $statusCode The HTTP status code (default 500).
      */
-    public static function error($message, $code = 500, $statusCode = 500)
-    {
+    public static function error(string $message, int $code = 500, int $statusCode = 500): void {
         $data = [
             "error" => [
                 "code" => $code,
@@ -56,8 +51,7 @@ class JsonResponse
      * @param array $data The payload to send.
      * @param int $statusCode The HTTP status code (default 200).
      */
-    public static function data($data, $statusCode = 200)
-    {
+    public static function data(array $data, int $statusCode = 200): void {
         self::send(["data" => $data], $statusCode);
     }
 }
